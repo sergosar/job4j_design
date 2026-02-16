@@ -21,14 +21,31 @@ class NameLoadTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Names array is empty");
     }
-
+    @Test
     void checkValidateNamesContains() {
         NameLoad nameLoad = new NameLoad();
         String[] names = {"a=b","c:d"};
 
         assertThatThrownBy(()->nameLoad.parse(names))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Names array is empty");
+                .hasMessageContaining("this name: %s does not contain the symbol '='".formatted(names[1]));
     }
 
+    @Test
+    void checkValidateNameStartsWith() {
+        NameLoad nameLoad = new NameLoad();
+        String[] names = {"=ab","c=d"};
+
+        assertThatThrownBy(()->nameLoad.parse(names))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("this name: %s does not contain a key".formatted(names[0]));
+    }
+
+    @Test
+    void checkGetMap() {
+        NameLoad nameLoad = new NameLoad();
+        assertThatThrownBy(nameLoad::getMap)
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("collection contains no data");
+    }
 }
