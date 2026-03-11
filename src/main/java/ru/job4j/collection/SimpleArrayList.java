@@ -27,8 +27,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, size);
-        T oldValue = container[index];
+        T oldValue = this.get(index);
         container[index] = newValue;
         return oldValue;
     }
@@ -71,9 +70,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
             @Override
             public T next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }

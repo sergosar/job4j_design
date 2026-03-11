@@ -130,7 +130,6 @@ class SimpleArrayListTest {
                 .isInstanceOf(IndexOutOfBoundsException.class);
     }
 
-
     @Test
     void whenGetIteratorFromEmptyListThenHasNextReturnFalse() {
         list = new SimpleArrayList<>(5);
