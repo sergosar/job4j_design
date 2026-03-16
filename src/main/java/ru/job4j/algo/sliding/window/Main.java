@@ -18,12 +18,23 @@ public class Main {
         int maxEnd = -1;
 
         for (Interval interval : intervals) {
+            activeIntervals.add(interval);
 
         }
+
 
         return new int[]{
                 maxStart, maxEnd
         };
+    }
+
+    static int[] overlap (Interval i1, Interval i2) {
+        int maxStart = Math.max(i1.start, i2.start);
+        int minEnd = Math.min(i1.end, i2.end);
+        if(maxStart<minEnd) {
+            return new int[]{maxStart, minEnd};
+        }
+        return new int[]{-1,-1};
     }
 
     public static void main(String[] args) {
