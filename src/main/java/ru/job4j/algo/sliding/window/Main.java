@@ -2,9 +2,9 @@ package ru.job4j.algo.sliding.window;
 
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -12,30 +12,34 @@ public class Main {
         if (intervals.isEmpty()) {
             return new int[]{-1, -1};
         }
-        var activeIntervals = new PriorityQueue<Interval>(Comparator.comparingInt(i -> i.end));
+        List<Event> events;
+
         int maxOverlap = 0;
         int maxStart = -1;
         int maxEnd = -1;
 
-        for (Interval interval : intervals) {
-            activeIntervals.add(interval);
+        events = intervals.stream().
+                flatMap(interval -> Stream.of(new Event(interval.start, Event.EventType.START), new Event(interval.end, Event.EventType.END))).
+                collect(Collectors.toList());
+        events.sort((a, b) -> {
+            if (a.coord != b.coord) {
+                return Integer.compare(a.coord, b.coord);
+            }
+            return Integer.compare(
+                    b.type.getValue(),
+                    a.type.getValue()
+            );
+        });
+
+        for (Event event : events) {
 
         }
-
 
         return new int[]{
                 maxStart, maxEnd
         };
     }
 
-    static int[] overlap (Interval i1, Interval i2) {
-        int maxStart = Math.max(i1.start, i2.start);
-        int minEnd = Math.min(i1.end, i2.end);
-        if(maxStart<minEnd) {
-            return new int[]{maxStart, minEnd};
-        }
-        return new int[]{-1,-1};
-    }
 
     public static void main(String[] args) {
         List<Interval> intervals = new ArrayList<>();
