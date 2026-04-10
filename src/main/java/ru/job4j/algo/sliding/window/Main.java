@@ -30,9 +30,24 @@ public class Main {
                     a.type.getValue()
             );
         });
-
+        int overlap = 0;
         for (Event event : events) {
-
+            overlap += event.type.getValue();
+            if (overlap > maxOverlap) {
+                maxOverlap = overlap;
+                maxStart = event.coord;
+            }
+        }
+        
+        boolean end = false;
+        for (Event event : events) {
+            if (end) {
+                maxEnd =event.coord;
+                break;
+            }
+            if (event.coord == maxStart) {
+                end=true;
+            }
         }
 
         return new int[]{
