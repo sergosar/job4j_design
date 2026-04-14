@@ -19,7 +19,7 @@ public class Main {
         int maxEnd = -1;
 
         events = intervals.stream().
-                flatMap(interval -> Stream.of(new Event(interval.start, Event.EventType.START), new Event(interval.end, Event.EventType.END))).
+                flatMap(interval -> Stream.of(new Event(interval.start, Event.EventType.START), new Event(interval.end + 1, Event.EventType.END))).
                 collect(Collectors.toList());
         events.sort((a, b) -> {
             if (a.coord != b.coord) {
@@ -31,24 +31,32 @@ public class Main {
             );
         });
         int overlap = 0;
-        for (Event event : events) {
-            overlap += event.type.getValue();
+
+        int i = 0;
+        while (i < events.size()) {
+            int currentCoord = events.get(i).coord;
+
+            int nextCoord = events.get(i).coord;
+
+            int candidateStart = currentCoord;
+            int candidateEnd = nextCoord - 1;
+
             if (overlap > maxOverlap) {
                 maxOverlap = overlap;
-                maxStart = event.coord;
+                maxStart = candidateStart;
+                maxEnd = candidateEnd;
+            } else if (overlap == maxOverlap) {
+                int candidateLength = candidateEnd - candidateStart;
+                int bestLength = maxEnd - maxStart;
+
+                if (candidateLength < bestLength ||
+                        (candidateLength == bestLength && candidateStart < maxStart)) {
+                    maxStart = candidateStart;
+                    maxEnd = candidateEnd;
+                }
             }
         }
-        
-        boolean end = false;
-        for (Event event : events) {
-            if (end) {
-                maxEnd =event.coord;
-                break;
-            }
-            if (event.coord == maxStart) {
-                end=true;
-            }
-        }
+
 
         return new int[]{
                 maxStart, maxEnd
