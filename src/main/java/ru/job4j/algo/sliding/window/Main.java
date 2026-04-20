@@ -7,18 +7,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
-
     public static int[] findMaxOverlapInterval(List<Interval> intervals) {
         if (intervals.isEmpty()) {
             return new int[]{-1, -1};
         }
-        List<Event> events;
-
         int maxOverlap = 0;
         int maxStart = -1;
         int maxEnd = -1;
-
-        events = intervals.stream().
+        List<Event> events = intervals.stream().
                 flatMap(interval -> Stream.of(new Event(interval.start, Event.EventType.START), new Event(interval.end, Event.EventType.END))).
                 collect(Collectors.toList());
         events.sort((a, b) -> {
@@ -31,21 +27,31 @@ public class Main {
             );
         });
         int overlap = 0;
-
-
+        boolean maxIntervalOverlap = false;
         for (int i = 0; i < events.size(); i++) {
             overlap += events.get(i).type.getValue();
             if (overlap > maxOverlap) {
-
+                if (i < events.size() - 1 && events.get(i + 1).type == Event.EventType.END && events.get(i + 1).coord == events.get(i).coord) {
+                    continue;
+                }
+                maxOverlap = overlap;
+                maxStart = events.get(i).coord;
+                maxIntervalOverlap = true;
+                continue;
+            }
+            if (maxIntervalOverlap && events.get(i).type == Event.EventType.END) {
+                maxEnd = events.get(i).coord;
+                maxIntervalOverlap = false;
             }
         }
-
-
+        Result result = new Result(maxStart, maxEnd);
         return new int[]{
-                maxStart, maxEnd
+                result.maxStart(), result.maxEnd()
         };
     }
 
+    private record Result(int maxStart, int maxEnd) {
+    }
 
     public static void main(String[] args) {
         List<Interval> intervals = new ArrayList<>();
