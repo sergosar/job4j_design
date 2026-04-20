@@ -26,6 +26,13 @@ public class Main {
                     a.type.getValue()
             );
         });
+        Result result = getResult(events, maxOverlap, maxStart, maxEnd);
+        return new int[]{
+                result.maxStart(), result.maxEnd()
+        };
+    }
+
+    private static Result getResult(List<Event> events, int maxOverlap, int maxStart, int maxEnd) {
         int overlap = 0;
         boolean maxIntervalOverlap = false;
         for (int i = 0; i < events.size(); i++) {
@@ -44,10 +51,7 @@ public class Main {
                 maxIntervalOverlap = false;
             }
         }
-        Result result = new Result(maxStart, maxEnd);
-        return new int[]{
-                result.maxStart(), result.maxEnd()
-        };
+        return new Result(maxStart, maxEnd);
     }
 
     private record Result(int maxStart, int maxEnd) {
