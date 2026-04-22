@@ -1,5 +1,7 @@
 package ru.job4j.algo.greedy;
+
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GasStationTest {
@@ -38,5 +40,32 @@ public class GasStationTest {
         int[] cost = {1, 2, 2};
         int result = gasStation.canCompleteCircuit(gas, cost);
         assertThat(result).isEqualTo(0);
+    }
+
+    @Test
+    void whenThatTestCase5() {
+        GasStation gasStation = new GasStation();
+        int[] gas = {4, 5, 2, 6, 5, 3};
+        int[] cost = {3, 2, 7, 3, 2, 9};
+        int result = gasStation.canCompleteCircuit(gas, cost);
+        assertThat(result).isEqualTo(-1);
+    }
+
+    @Test
+    void whenThatTestCase6() {
+        GasStation gasStation = new GasStation();
+        int[] gas = {5, 0, 9, 4, 3, 3, 9, 9, 1, 2};
+        int[] cost = {6, 7, 5, 9, 5, 8, 7, 1, 10, 5};
+        int result = gasStation.canCompleteCircuit(gas, cost);
+        assertThat(result).isEqualTo(-1);
+    }
+
+    @Test
+    void whenThatTestCase7() {
+        GasStation gasStation = new GasStation();
+        int[] gas = {4, 0, 1};
+        int[] cost = {3, 2, 1};
+        int result = gasStation.canCompleteCircuit(gas, cost);
+        assertThat(result).isEqualTo(-1);
     }
 }
